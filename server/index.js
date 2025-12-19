@@ -1,12 +1,16 @@
 import express from "express";
 import cors from "cors";
 import supabase from "./config/supabase.js";
+import blogRoutes from "./routes/blogRoutes.js";
 
 const app = express();
 
 // Enable CORS and JSON parsing
 app.use(cors());
 app.use(express.json());
+
+// Mount blog routes
+app.use('/blogs', blogRoutes);
 
 // Add a health check route at /health
 app.get('/health', (req, res) => {
