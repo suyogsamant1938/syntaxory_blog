@@ -1,16 +1,30 @@
 import express from "express";
 import cors from "cors";
 import supabase from "./config/supabase.js";
+import webhookHandler from './controllers/webhookController.js';
 import blogRoutes from "./routes/blogRoutes.js";
+import imageRoutes from "./routes/imageRoutes.js";
+import stripeRoutes from "./routes/stripeRoutes.js";
 
 const app = express();
 
-// Enable CORS and JSON parsing
+// Enable CORS
 app.use(cors());
+
+// Stripe webhook endpoint requires the raw body for signature verification
+// Register it BEFORE the JSON body parser so the raw body is preserved
+app.post('/webhook', express.raw({ type: 'application/json' }), webhookHandler);
+
+// JSON parsing for all other routes
 app.use(express.json());
 
 // Mount blog routes
 app.use('/blogs', blogRoutes);
+
+app.use("/stripe", stripeRoutes);
+
+// Mount image routes
+app.use("/images", imageRoutes);
 
 // Add a health check route at /health
 app.get('/health', (req, res) => {
