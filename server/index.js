@@ -5,6 +5,8 @@ import webhookHandler from './controllers/webhookController.js';
 import blogRoutes from "./routes/blogRoutes.js";
 import imageRoutes from "./routes/imageRoutes.js";
 import stripeRoutes from "./routes/stripeRoutes.js";
+import likeRoutes from "./routes/likeRoutes.js";
+import commentRoutes from "./routes/commentRoutes.js";
 
 const app = express();
 
@@ -22,6 +24,10 @@ app.use(express.json());
 app.use('/blogs', blogRoutes);
 
 app.use("/stripe", stripeRoutes);
+
+app.use("/likes", likeRoutes);
+
+app.use("/comments", commentRoutes);
 
 // Mount image routes
 app.use("/images", imageRoutes);
