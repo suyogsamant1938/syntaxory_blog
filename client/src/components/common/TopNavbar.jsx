@@ -67,6 +67,11 @@ const TopNavbar = () => {
 
             {/* User Section */}
             <div className="nav-user">
+              {isAuthenticated && (
+                <Link to="/create" className="btn btn-primary btn-sm write-btn">
+                  <FiEdit /> <span className="write-text">Write</span>
+                </Link>
+              )}
               {isAuthenticated ? (
                 <div className="user-menu">
                   <button 

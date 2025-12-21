@@ -9,6 +9,8 @@ import BlogsPage from './pages/BlogsPage';
 import AboutPage from './pages/AboutPage';
 import LoginRegister from './components/authentication/LoginRegister';
 import BlogDetailPage from './pages/BlogDetailPage';
+import CreateBlogPage from './pages/CreateBlogPage';
+import ProfilePage from './pages/ProfilePage';
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import BlogManagement from './pages/admin/BlogManagement';
@@ -111,10 +113,31 @@ function App() {
               <Footer />
             </div>
           } />
-          {/* <Route path="/create" element={<ProtectedRoute requirePaid={true}><CreateBlogPage /></ProtectedRoute>} /> */}
-          {/* <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} /> */}
+          <Route path="/create" element={
+            <ProtectedRoute requirePaid={true}>
+              <div className="app">
+                <TopNavbar />
+                <main className="main-content">
+                  <CreateBlogPage />
+                </main>
+                <Footer />
+              </div>
+            </ProtectedRoute>
+          } />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <div className="app">
+                <TopNavbar />
+                <main className="main-content">
+                  <ProfilePage />
+                </main>
+                <Footer />
+              </div>
+            </ProtectedRoute>
+          } />
         </Routes>
       </Router>
+      </ToastProvider>
     </AuthProvider>
   );
 }
