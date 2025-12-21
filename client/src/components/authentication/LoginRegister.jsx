@@ -1,87 +1,133 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
 import { FiMail, FiLock, FiUser, FiGithub } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
 import './LoginRegister.css';
 
 const LoginRegister = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     confirmPassword: '',
     name: ''
   });
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { signIn, signUp, signInWithGoogle, signInWithGithub } = useAuth();
+  const { addToast } = useToast();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+    setError('');
+  };
+
+  const validateForm = () => {
+    if (!formData.email || !formData.password) {
+      addToast('Email and password are required', 'error');
+      return false;
+    }
+
+    if (!isLogin) {
+      if (!formData.name) {
+        addToast('Name is required', 'error');
+        return false;
+      }
+      if (formData.password !== formData.confirmPassword) {
+        addToast('Passwords do not match', 'error');
+        return false;
+      }
+      if (formData.password.length < 6) {
+        addToast('Password must be at least 6 characters', 'error');
+        return false;
+      }
+    }
+
+    return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) return;
+
     setIsLoading(true);
-    
-    // TODO: Implement Supabase authentication
-    console.log(isLogin ? 'Logging in...' : 'Registering...', formData);
-    
-    setTimeout(() => {
+    setError('');
+
+    try {
+      if (isLogin) {
+        await signIn(formData.email, formData.password);
+        addToast('Successfully logged in!', 'success');
+        navigate('/');
+      } else {
+        await signUp(formData.email, formData.password, formData.name);
+        addToast('Account created! Please check your email.', 'success');
+        setIsLoading(false);
+      }
+    } catch (err) {
+      setError(err.message || 'An error occurred');
+      addToast(err.message || 'Authentication failed', 'error');
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
-  const handleSocialLogin = (provider) => {
-    // TODO: Implement social login with Supabase
-    console.log(`Logging in with ${provider}`);
+  const handleSocialLogin = async (provider) => {
+    setIsLoading(true);
+    setError('');
+
+    try {
+      if (provider === 'google') {
+        await signInWithGoogle();
+      } else if (provider === 'github') {
+        await signInWithGithub();
+      }
+    } catch (err) {
+      addToast(err.message || 'Social login failed', 'error');
+      setIsLoading(false);
+    }
+  };
+
+  const toggleMode = () => {
+    setIsLogin(!isLogin);
+    setError('');
+    setFormData({
+      email: '',
+      password: '',
+      confirmPassword: '',
+      name: ''
+    });
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card glass">
-        {/* Header */}
-        <div className="auth-header">
-          <h2 className="auth-title gradient-text">
-            {isLogin ? 'Welcome Back' : 'Create Account'}
-          </h2>
-          <p className="auth-subtitle">
-            {isLogin 
-              ? 'Sign in to continue your journey' 
-              : 'Join our community of developers'}
-          </p>
+    <div className="login-register-container">
+      <div className="login-register-background">
+        {/* Decorative elements handled by CSS pseudo-elements */}
+      </div>
+      
+      <div className="login-register-card">
+        <div className="card-header">
+          <h2>{isLogin ? 'Welcome Back' : 'Create Account'}</h2>
+          <p>{isLogin ? 'Sign in to continue' : 'Join our community'}</p>
         </div>
 
-        {/* Social Login */}
-        <div className="social-login">
-          <button 
-            className="social-btn"
-            onClick={() => handleSocialLogin('google')}
-          >
-            <FcGoogle />
-            <span>Continue with Google</span>
-          </button>
-          <button 
-            className="social-btn"
-            onClick={() => handleSocialLogin('github')}
-          >
-            <FiGithub />
-            <span>Continue with GitHub</span>
-          </button>
-        </div>
+        {error && (
+          <div className={`error-message ${!isLogin && error.includes('email') ? 'success-message' : ''}`}>
+            {error}
+          </div>
+        )}
 
-        {/* Divider */}
-        <div className="auth-divider">
-          <span>or</span>
-        </div>
-
-        {/* Form */}
-        <form className="auth-form" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="auth-form">
           {!isLogin && (
             <div className="form-group">
-              <label htmlFor="name" className="form-label">
-                <FiUser />
-                <span>Full Name</span>
+              <label htmlFor="name">
+                <FiUser /> Name
               </label>
               <input
                 type="text"
@@ -89,17 +135,15 @@ const LoginRegister = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="form-input"
-                placeholder="John Doe"
-                required={!isLogin}
+                placeholder="Enter your name"
+                disabled={isLoading}
               />
             </div>
           )}
 
           <div className="form-group">
-            <label htmlFor="email" className="form-label">
-              <FiMail />
-              <span>Email Address</span>
+            <label htmlFor="email">
+              <FiMail /> Email
             </label>
             <input
               type="email"
@@ -107,16 +151,14 @@ const LoginRegister = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="form-input"
-              placeholder="you@example.com"
-              required
+              placeholder="Enter your email"
+              disabled={isLoading}
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="password" className="form-label">
-              <FiLock />
-              <span>Password</span>
+            <label htmlFor="password">
+              <FiLock /> Password
             </label>
             <input
               type="password"
@@ -124,17 +166,15 @@ const LoginRegister = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="form-input"
-              placeholder="••••••••"
-              required
+              placeholder="Enter your password"
+              disabled={isLoading}
             />
           </div>
 
           {!isLogin && (
             <div className="form-group">
-              <label htmlFor="confirmPassword" className="form-label">
-                <FiLock />
-                <span>Confirm Password</span>
+              <label htmlFor="confirmPassword">
+                <FiLock /> Confirm Password
               </label>
               <input
                 type="password"
@@ -142,43 +182,51 @@ const LoginRegister = () => {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="form-input"
-                placeholder="••••••••"
-                required={!isLogin}
+                placeholder="Confirm your password"
+                disabled={isLoading}
               />
             </div>
           )}
 
-          {isLogin && (
-            <div className="form-footer">
-              <a href="#" className="forgot-link">Forgot password?</a>
-            </div>
-          )}
-
-          <button 
-            type="submit" 
-            className="btn btn-primary btn-full"
-            disabled={isLoading}
-          >
+          <button type="submit" className="btn btn-primary btn-block" disabled={isLoading}>
             {isLoading ? (
               <span className="loading-spinner"></span>
             ) : (
-              <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
+              isLogin ? 'Sign In' : 'Sign Up'
             )}
           </button>
         </form>
 
-        {/* Toggle */}
-        <div className="auth-toggle">
-          <span>
-            {isLogin ? "Don't have an account?" : 'Already have an account?'}
-          </span>
+        <div className="divider">
+          <span>or continue with</span>
+        </div>
+
+        <div className="social-login">
           <button 
-            className="toggle-btn"
-            onClick={() => setIsLogin(!isLogin)}
+            type="button" 
+            className="social-btn google-btn"
+            onClick={() => handleSocialLogin('google')}
+            disabled={isLoading}
           >
-            {isLogin ? 'Sign Up' : 'Sign In'}
+            <FcGoogle /> Google
           </button>
+          <button 
+            type="button" 
+            className="social-btn github-btn"
+            onClick={() => handleSocialLogin('github')}
+            disabled={isLoading}
+          >
+            <FiGithub /> GitHub
+          </button>
+        </div>
+
+        <div className="toggle-mode">
+          <p>
+            {isLogin ? "Don't have an account?" : 'Already have an account?'}
+            <button type="button" onClick={toggleMode} disabled={isLoading}>
+              {isLogin ? 'Sign Up' : 'Sign In'}
+            </button>
+          </p>
         </div>
       </div>
     </div>

@@ -1,0 +1,57 @@
+.payment-result-page {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+}
+
+.result-card {
+    max-width: 500px;
+    width: 100%;
+    padding: var(--space-10);
+    text-align: center;
+    border-radius: var(--radius-2xl);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+}
+
+.result-icon {
+    font-size: 4rem;
+    margin-bottom: var(--space-6);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--color-bg-elevated);
+}
+
+.result-icon.success {
+    color: var(--color-accent-green);
+    background: rgba(67, 233, 123, 0.1);
+}
+
+.result-icon.error {
+    color: var(--color-accent-orange);
+    background: rgba(255, 107, 107, 0.1);
+}
+
+.result-title {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-4);
+}
+
+.result-message {
+    color: var(--color-text-secondary);
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-8);
+    line-height: 1.6;
+}
+
+.result-actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-4);
+}

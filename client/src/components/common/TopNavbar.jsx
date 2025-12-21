@@ -1,117 +1,127 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { FiSearch, FiMenu, FiX, FiUser, FiLogOut, FiEdit } from 'react-icons/fi';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { FiSearch, FiMenu, FiX, FiUser, FiEdit, FiLogOut, FiShield } from 'react-icons/fi';
+import Menu from './Menu';
 import './TopNavbar.css';
 
 const TopNavbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [user, setUser] = useState(null); // TODO: Connect to Supabase auth
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  useEffect(() => {
+  const { user, profile, isAuthenticated, isAdmin, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  useState(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 50);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleLogout = () => {
-    // TODO: Implement Supabase logout
-    setUser(null);
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      setIsDropdownOpen(false);
+      navigate('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   return (
-    <nav className={`navbar ${isScrolled ? 'navbar-scrolled' : ''}`}>
-      <div className="container navbar-container">
-        {/* Logo */}
-        <Link to="/" className="navbar-logo">
-          <span className="logo-text gradient-text">Syntaxory</span>
-        </Link>
+    <>
+      <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
+        <div className="container navbar-container">
+          {/* Logo */}
+          <Link to="/" className="navbar-logo">
+            <span className="logo-text gradient-text">Syntaxory</span>
+          </Link>
 
-        {/* Desktop Navigation */}
-        <div className="navbar-menu">
-          <Link to="/" className="nav-link">Home</Link>
-          <Link to="/blogs" className="nav-link">Blogs</Link>
-          <Link to="/about" className="nav-link">About</Link>
-        </div>
-
-        {/* Search & Actions */}
-        <div className="navbar-actions">
-          {/* Search */}
-          <div className={`search-container ${isSearchOpen ? 'search-open' : ''}`}>
-            <input
-              type="text"
-              placeholder="Search blogs..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
-            />
-            <button 
-              className="search-btn"
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
-            >
-              <FiSearch />
-            </button>
+          {/* Desktop Navigation */}
+          <div className="navbar-menu">
+            <Link to="/" className="nav-link">Home</Link>
+            <Link to="/blogs" className="nav-link">Blogs</Link>
+            <Link to="/about" className="nav-link">About</Link>
           </div>
 
-          {/* User Menu */}
-          {user ? (
-            <div className="user-menu">
-              <button className="user-avatar">
-                <FiUser />
+          {/* Search & Actions */}
+          <div className="navbar-actions">
+            {/* Search */}
+            <div className={`search-container ${isSearchExpanded ? 'expanded' : ''}`}>
+              <input
+                type="text"
+                placeholder="Search blogs..."
+                className="search-input"
+              />
+              <button 
+                className="search-btn"
+                onClick={() => setIsSearchExpanded(!isSearchExpanded)}
+              >
+                <FiSearch />
               </button>
-              <div className="user-dropdown">
-                <Link to="/profile" className="dropdown-item">
-                  <FiUser /> Profile
-                </Link>
-                <Link to="/create" className="dropdown-item">
-                  <FiEdit /> Write Blog
-                </Link>
-                <button onClick={handleLogout} className="dropdown-item">
-                  <FiLogOut /> Logout
-                </button>
-              </div>
             </div>
-          ) : (
-            <Link to="/login" className="btn btn-primary btn-sm">
-              Login
-            </Link>
-          )}
 
-          {/* Mobile Menu Toggle */}
-          <button 
-            className="mobile-menu-btn"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <FiX /> : <FiMenu />}
-          </button>
+            {/* User Section */}
+            <div className="nav-user">
+              {isAuthenticated ? (
+                <div className="user-menu">
+                  <button 
+                    className="user-avatar"
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  >
+                    {user?.user_metadata?.name?.charAt(0) || user?.email?.charAt(0) || 'U'}
+                  </button>
+                  
+                  {isDropdownOpen && (
+                    <div className="user-dropdown">
+                      <div className="dropdown-header">
+                        <p className="user-name">{user?.user_metadata?.name || 'User'}</p>
+                        <p className="user-email">{user?.email}</p>
+                      </div>
+                      <div className="dropdown-menu">
+                        <Link to="/profile" className="dropdown-item" onClick={() => setIsDropdownOpen(false)}>
+                          <FiUser /> Profile
+                        </Link>
+                        <Link to="/create" className="dropdown-item" onClick={() => setIsDropdownOpen(false)}>
+                          <FiEdit /> Write Blog
+                        </Link>
+                        {isAdmin && (
+                          <Link to="/admin" className="dropdown-item" onClick={() => setIsDropdownOpen(false)}>
+                            <FiShield /> Admin Dashboard
+                          </Link>
+                        )}
+                        <button className="dropdown-item logout" onClick={handleLogout}>
+                          <FiLogOut /> Logout
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link to="/login" className="btn btn-primary">
+                  Login
+                </Link>
+              )}
+            </div>
+
+            {/* Mobile Menu Toggle */}
+            <button 
+              className="mobile-menu-btn"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? <FiX /> : <FiMenu />}
+            </button>
+          </div>
         </div>
-      </div>
+      </nav>
 
       {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="mobile-menu">
-          <Link to="/" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-            Home
-          </Link>
-          <Link to="/blogs" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-            Blogs
-          </Link>
-          <Link to="/about" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-            About
-          </Link>
-          {!user && (
-            <Link to="/login" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-              Login
-            </Link>
-          )}
-        </div>
-      )}
-    </nav>
+      <Menu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} user={user} />
+    </>
   );
 };
 

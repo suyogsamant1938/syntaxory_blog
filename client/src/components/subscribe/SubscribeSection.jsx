@@ -1,10 +1,38 @@
+import { useState } from 'react';
 import { FiCheck, FiZap, FiStar } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
+import stripeService from '../../services/stripeService';
 import './SubscribeSection.css';
 
 const SubscribeSection = () => {
-  const handleSubscribe = () => {
-    // TODO: Integrate with Stripe checkout
-    console.log('Redirecting to Stripe checkout...');
+  const [isLoading, setIsLoading] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const { addToast } = useToast();
+  const navigate = useNavigate();
+
+  const handleSubscribe = async () => {
+    if (!isAuthenticated) {
+      addToast('Please login to subscribe', 'info');
+      navigate('/login');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { url } = await stripeService.createCheckoutSession();
+      if (url) {
+        window.location.href = url;
+      } else {
+        addToast('Failed to start checkout session', 'error');
+      }
+    } catch (error) {
+      console.error('Error starting checkout:', error);
+      addToast('Something went wrong. Please try again.', 'error');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const features = [
@@ -69,9 +97,13 @@ const SubscribeSection = () => {
             ))}
           </div>
 
-          <button className="btn btn-primary btn-full btn-lg" onClick={handleSubscribe}>
+          <button 
+            className="btn btn-primary btn-full btn-lg" 
+            onClick={handleSubscribe}
+            disabled={isLoading}
+          >
             <FiZap />
-            <span>Subscribe Now</span>
+            <span>{isLoading ? 'Processing...' : 'Subscribe Now'}</span>
           </button>
 
           <p className="pricing-note">

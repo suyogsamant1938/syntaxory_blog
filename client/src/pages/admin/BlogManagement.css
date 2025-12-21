@@ -1,0 +1,204 @@
+.blog-management {
+    padding: var(--space-8);
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-8);
+}
+
+.page-title {
+    font-size: var(--text-4xl);
+    font-weight: var(--font-black);
+    margin-bottom: var(--space-2);
+}
+
+.page-subtitle {
+    font-size: var(--text-base);
+    color: var(--color-text-tertiary);
+}
+
+.filters-bar {
+    display: flex;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+}
+
+.search-box {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.filter-select {
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    color: var(--color-text-primary);
+    font-size: var(--text-base);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    min-width: 150px;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--color-accent-purple);
+}
+
+.type-badge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: var(--font-semibold);
+}
+
+.type-badge.ai {
+    background: rgba(79, 172, 254, 0.1);
+    color: var(--color-accent-blue);
+}
+
+.type-badge.human {
+    background: rgba(102, 126, 234, 0.1);
+    color: var(--color-accent-purple);
+}
+
+.date-cell {
+    color: var(--color-text-tertiary);
+    font-size: var(--text-sm);
+}
+
+.action-buttons {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.action-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    font-size: var(--text-base);
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+}
+
+.action-btn.view:hover {
+    background: var(--color-accent-blue);
+    border-color: var(--color-accent-blue);
+    color: var(--color-text-primary);
+}
+
+.action-btn.edit:hover {
+    background: var(--color-accent-purple);
+    border-color: var(--color-accent-purple);
+    color: var(--color-text-primary);
+}
+
+.action-btn.delete:hover {
+    background: var(--color-accent-orange);
+    border-color: var(--color-accent-orange);
+    color: var(--color-text-primary);
+}
+
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-4);
+    border-top: 1px solid var(--color-border);
+}
+
+.pagination-btn {
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: var(--color-accent-purple);
+    border-color: var(--color-accent-purple);
+    color: var(--color-text-primary);
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-pages {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.pagination-page {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.pagination-page:hover {
+    border-color: var(--color-accent-purple);
+    color: var(--color-text-primary);
+}
+
+.pagination-page.active {
+    background: var(--gradient-primary);
+    border-color: transparent;
+    color: var(--color-text-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .blog-management {
+        padding: var(--space-4);
+    }
+
+    .page-header {
+        flex-direction: column;
+        gap: var(--space-4);
+    }
+
+    .filters-bar {
+        flex-direction: column;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: var(--space-4);
+    }
+}

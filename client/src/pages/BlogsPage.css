@@ -11,21 +11,6 @@
 .page-title {
     font-size: var(--text-5xl);
     font-weight: var(--font-black);
-    margin-bottom: var(--space-4);
-}
-
-.page-subtitle {
-    font-size: var(--text-lg);
-    color: var(--color-text-secondary);
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .blogs-page {
-        padding: var(--space-8) 0;
-    }
 
     .page-title {
         font-size: var(--text-4xl);
