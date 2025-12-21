@@ -7,11 +7,18 @@ import imageRoutes from "./routes/imageRoutes.js";
 import stripeRoutes from "./routes/stripeRoutes.js";
 import likeRoutes from "./routes/likeRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
+import { errorHandler } from "./middleware/errorHandler.js";
+import aiBlogRoutes from "./routes/aiBlogRoutes.js";
 
 const app = express();
 
 // Enable CORS
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  })
+);
 
 // Stripe webhook endpoint requires the raw body for signature verification
 // Register it BEFORE the JSON body parser so the raw body is preserved
@@ -28,6 +35,11 @@ app.use("/stripe", stripeRoutes);
 app.use("/likes", likeRoutes);
 
 app.use("/comments", commentRoutes);
+
+app.use("/ai", aiBlogRoutes);
+
+
+app.use(errorHandler);
 
 // Mount image routes
 app.use("/images", imageRoutes);
