@@ -1,0 +1,121 @@
+.menu-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--color-overlay);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: var(--z-modal-backdrop);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.menu-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 400px;
+    background: var(--color-bg-secondary);
+    border-left: 1px solid var(--color-border);
+    z-index: var(--z-modal);
+    display: flex;
+    flex-direction: column;
+    animation: slideInRight 0.3s ease-out;
+    box-shadow: var(--shadow-2xl);
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.menu-title {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    margin: 0;
+}
+
+.menu-close-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    font-size: var(--text-xl);
+}
+
+.menu-close-btn:hover {
+    background: var(--color-accent-orange);
+    border-color: var(--color-accent-orange);
+    transform: rotate(90deg);
+}
+
+.menu-nav {
+    flex: 1;
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    overflow-y: auto;
+}
+
+.menu-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
+    font-size: var(--text-lg);
+    font-weight: var(--font-medium);
+}
+
+.menu-link svg {
+    font-size: var(--text-xl);
+}
+
+.menu-link:hover {
+    background: var(--color-bg-elevated);
+    color: var(--color-text-primary);
+    transform: translateX(4px);
+}
+
+.menu-cta {
+    padding: var(--space-6);
+    border-top: 1px solid var(--color-border);
+}
+
+.menu-cta .btn {
+    width: 100%;
+    justify-content: center;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-panel {
+        max-width: 100%;
+    }
+}
