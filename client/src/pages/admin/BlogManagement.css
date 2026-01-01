@@ -191,10 +191,49 @@
     .page-header {
         flex-direction: column;
         gap: var(--space-4);
+        align-items: center;
+        text-align: center;
     }
 
     .filters-bar {
         flex-direction: column;
+        gap: var(--space-3);
+    }
+
+    .filter-group {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-select {
+        width: 100%;
+        min-width: 0;
+    }
+
+    /* Table Mobile Optimizations */
+    .data-table th:nth-child(2),
+    .data-table td:nth-child(2),
+    .data-table th:nth-child(4),
+    .data-table td:nth-child(4) {
+        display: none;
+        /* Hide Author Type and Created Date */
+    }
+
+    .action-buttons {
+        gap: var(--space-1);
+    }
+
+    .action-btn {
+        padding: var(--space-1) var(--space-2);
+        font-size: 10px;
+        height: auto;
+        width: auto;
+    }
+
+    .action-btn span {
+        display: none;
+        /* Icon only on mobile */
     }
 
     .pagination {

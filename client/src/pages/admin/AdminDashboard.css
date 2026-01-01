@@ -154,4 +154,33 @@
     .dashboard-title {
         font-size: var(--text-2xl);
     }
+
+    /* Table Mobile Optimizations */
+    .data-table th:nth-child(2),
+    .data-table td:nth-child(2) {
+        display: none;
+        /* Hide Author Type on mobile */
+    }
+
+    .blog-title-cell {
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .table-container {
+        margin: 0 -1rem;
+        padding: 0 1rem;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .data-table th:nth-child(4),
+    .data-table td:nth-child(4) {
+        display: none;
+        /* Hide Date on very small screens */
+    }
 }

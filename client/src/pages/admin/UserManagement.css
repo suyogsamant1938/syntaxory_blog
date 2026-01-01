@@ -74,4 +74,27 @@
     .user-count-badge {
         display: none;
     }
+
+    /* Table Mobile Optimizations */
+    .data-table th:nth-child(3),
+    .data-table td:nth-child(3) {
+        display: none;
+        /* Hide Joined Date */
+    }
+
+    .user-name {
+        font-size: var(--text-sm);
+    }
+
+    .user-email {
+        font-size: 10px;
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .role-select {
+        font-size: 11px;
+        padding: 2px 4px;
+    }
 }

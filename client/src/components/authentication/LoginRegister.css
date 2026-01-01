@@ -243,10 +243,25 @@
 /* Responsive */
 @media (max-width: 480px) {
     .login-register-card {
-        padding: var(--space-6);
+        padding: var(--space-6) var(--space-4);
+        border-radius: var(--radius-xl);
+    }
+
+    .card-header h2 {
+        font-size: var(--text-2xl);
     }
 
     .social-login {
         grid-template-columns: 1fr;
+    }
+
+    .login-register-background::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .login-register-background::after {
+        width: 250px;
+        height: 250px;
     }
 }

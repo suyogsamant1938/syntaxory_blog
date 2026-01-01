@@ -146,7 +146,7 @@
 /* Responsive */
 @media (max-width: 768px) {
     .blog-article {
-        padding: var(--space-6);
+        padding: var(--space-6) var(--space-5);
         border-radius: var(--radius-xl);
     }
 
@@ -155,7 +155,28 @@
     }
 
     .article-image-container {
-        margin: 0 calc(var(--space-6) * -1) var(--space-6);
+        margin: 0 calc(var(--space-5) * -1) var(--space-6);
         height: 250px;
+    }
+
+    .article-content {
+        font-size: var(--text-base);
+        line-height: 1.7;
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .article-content img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Ensure tables inside content are scrollable */
+    .article-content table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-bottom: var(--space-4);
     }
 }

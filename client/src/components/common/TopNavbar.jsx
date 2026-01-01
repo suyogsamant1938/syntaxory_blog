@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { FiSearch, FiMenu, FiX, FiUser, FiEdit, FiLogOut, FiShield } from 'react-icons/fi';
@@ -14,9 +14,9 @@ const TopNavbar = () => {
   const { user, profile, isAuthenticated, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
 
-  useState(() => {
+  useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
