@@ -35,7 +35,7 @@ export const createBlog = async (req, res) => {
 	try {
 		const { data, error } = await supabase
 			.from('blogs')
-			.insert([{ title, content, author_id }])
+			.insert([{ title, content, author_id, author_type: 'HUMAN' }])
 			.select()
 			.single();
 
