@@ -69,11 +69,13 @@ const LoginRegister = () => {
       } else {
         await signUp(formData.email, formData.password, formData.name);
         addToast('Account created! Please check your email.', 'success');
-        setIsLoading(false);
+        navigate("/login");
       }
     } catch (err) {
       setError(err.message || 'An error occurred');
       addToast(err.message || 'Authentication failed', 'error');
+    }
+    finally {
       setIsLoading(false);
     }
   };

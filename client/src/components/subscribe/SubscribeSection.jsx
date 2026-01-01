@@ -48,111 +48,50 @@ const SubscribeSection = () => {
 
   return (
     <section className="subscribe-section">
-      <div className="subscribe-bg">
-        <div className="subscribe-gradient-1"></div>
-        <div className="subscribe-gradient-2"></div>
-      </div>
-
       <div className="container">
-        {/* Header */}
-        <div className="subscribe-header">
-          <div className="subscribe-badge">
-            <FiStar />
-            <span>Premium Membership</span>
-          </div>
-          <h2 className="subscribe-title">
-            Unlock Your Full <span className="gradient-text">Potential</span>
-          </h2>
-          <p className="subscribe-subtitle">
-            Join thousands of developers who are already creating amazing content
-            with our premium features.
-          </p>
-        </div>
-
-        {/* Pricing Card */}
-        <div className="pricing-card glass">
-          <div className="pricing-header">
-            <div className="pricing-icon">
-              <FiZap />
+        <div className="subscribe-banner glass">
+          {/* Left: Info */}
+          <div className="banner-info">
+            <div className="banner-header">
+              <div className="banner-badge">
+                <FiStar /> <span>Premium</span>
+              </div>
+              <h2 className="banner-title">
+                Unlock Full <span className="gradient-text">Potential</span>
+              </h2>
             </div>
-            <h3 className="pricing-title">Pro Plan</h3>
-            <div className="pricing-price">
-              <span className="price-currency">$</span>
-              <span className="price-amount">9</span>
+            <p className="banner-subtitle">
+              Get AI writing assistance, advanced analytics, and unlimited access.
+            </p>
+          </div>
+
+          {/* Middle: Key Features Pills */}
+          <div className="banner-features">
+            <div className="feature-pill">
+              <FiZap /> <span>AI Powered</span>
+            </div>
+            <div className="feature-pill">
+              <FiCheck /> <span>Analytics</span>
+            </div>
+            <div className="feature-pill">
+              <FiCheck /> <span>Unlimited</span>
+            </div>
+          </div>
+
+          {/* Right: Action */}
+          <div className="banner-action">
+            <div className="banner-price">
+              <span className="price-currency">₹</span>
+              <span className="price-amount">10</span>
               <span className="price-period">/month</span>
             </div>
-            <p className="pricing-description">
-              Everything you need to build your technical brand
-            </p>
-          </div>
-
-          <div className="pricing-features">
-            {features.map((feature, index) => (
-              <div key={index} className="feature-item">
-                <div className="feature-icon">
-                  <FiCheck />
-                </div>
-                <span>{feature}</span>
-              </div>
-            ))}
-          </div>
-
-          <button 
-            className="btn btn-primary btn-full btn-lg" 
-            onClick={handleSubscribe}
-            disabled={isLoading}
-          >
-            <FiZap />
-            <span>{isLoading ? 'Processing...' : 'Subscribe Now'}</span>
-          </button>
-
-          <p className="pricing-note">
-            Cancel anytime. No questions asked.
-          </p>
-        </div>
-
-        {/* Testimonials */}
-        <div className="testimonials">
-          <div className="testimonial-card">
-            <p className="testimonial-text">
-              "Syntaxory has transformed how I share my knowledge. The platform is
-              intuitive and the community is amazing!"
-            </p>
-            <div className="testimonial-author">
-              <div className="author-avatar">👨‍💻</div>
-              <div>
-                <div className="author-name">Alex Johnson</div>
-                <div className="author-role">Full Stack Developer</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="testimonial-card">
-            <p className="testimonial-text">
-              "The AI writing assistance is a game-changer. I can focus on the
-              content while the platform handles the rest."
-            </p>
-            <div className="testimonial-author">
-              <div className="author-avatar">👩‍💻</div>
-              <div>
-                <div className="author-name">Sarah Chen</div>
-                <div className="author-role">DevOps Engineer</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="testimonial-card">
-            <p className="testimonial-text">
-              "Best investment for my technical writing career. The analytics help
-              me understand what my readers want."
-            </p>
-            <div className="testimonial-author">
-              <div className="author-avatar">🧑‍💻</div>
-              <div>
-                <div className="author-name">Mike Rodriguez</div>
-                <div className="author-role">Tech Lead</div>
-              </div>
-            </div>
+            <button 
+              className="btn btn-primary btn-sm" 
+              onClick={handleSubscribe}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Processing...' : 'Subscribe'}
+            </button>
           </div>
         </div>
       </div>

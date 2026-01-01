@@ -46,6 +46,7 @@ const TopNavbar = () => {
             <Link to="/" className="nav-link">Home</Link>
             <Link to="/blogs" className="nav-link">Blogs</Link>
             <Link to="/about" className="nav-link">About</Link>
+            {isAuthenticated && <Link to="/profile" className="nav-link">Profile</Link>}
           </div>
 
           {/* Search & Actions */}

@@ -17,7 +17,7 @@ const Hero = () => {
           {/* Badge */}
           <div className="hero-badge">
             <FiTrendingUp />
-            <span>Join 10,000+ developers</span>
+            <span>Join our growing community</span>
           </div>
 
           {/* Main Heading */}
@@ -27,8 +27,8 @@ const Hero = () => {
 
           {/* Subtitle */}
           <p className="hero-subtitle">
-            A premium platform for developers to share knowledge, learn from peers,
-            and build their personal brand through high-quality technical content.
+            A premium platform for developers to share knowledge, learn from peers, 
+            and create high-quality technical content.
           </p>
 
           {/* CTA Buttons */}
@@ -41,31 +41,13 @@ const Hero = () => {
               Start Writing
             </Link>
           </div>
-
-          {/* Stats */}
-          <div className="hero-stats">
-            <div className="stat-item">
-              <div className="stat-value">10K+</div>
-              <div className="stat-label">Developers</div>
-            </div>
-            <div className="stat-divider"></div>
-            <div className="stat-item">
-              <div className="stat-value">5K+</div>
-              <div className="stat-label">Articles</div>
-            </div>
-            <div className="stat-divider"></div>
-            <div className="stat-item">
-              <div className="stat-value">50K+</div>
-              <div className="stat-label">Readers</div>
-            </div>
-          </div>
         </div>
 
         {/* Floating Elements */}
         <div className="hero-floats">
           <div className="float-card float-1">
             <div className="float-icon">💻</div>
-            <div className="float-text">Web Development</div>
+            <div className="float-text">Web Dev</div>
           </div>
           <div className="float-card float-2">
             <div className="float-icon">🚀</div>
