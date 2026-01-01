@@ -7,7 +7,7 @@ export const requirePaidUser = async (req, res, next) => {
     .eq("id", req.user.id)
     .single();
 
-  if (data?.role !== "PAID_SUBSCRIBER") {
+  if (data?.role !== "PAID_SUBSCRIBER" && data?.role !== "ADMIN") {
     return res.status(403).json({ message: "Subscription required" });
   }
 

@@ -119,7 +119,6 @@ const UserManagement = () => {
             <option value="all">All Roles</option>
             <option value="USER">User</option>
             <option value="PAID_SUBSCRIBER">Paid Subscriber</option>
-            <option value="ADMIN">Admin</option>
           </select>
         </div>
       </div>
@@ -165,10 +164,11 @@ const UserManagement = () => {
                         className={`role-select ${user.role.toLowerCase().replace('_', '-')}`}
                         value={user.role}
                         onChange={(e) => handleRoleUpdate(user.id, e.target.value)}
+                        disabled={user.role === 'ADMIN'}
                       >
                         <option value="USER">User</option>
                         <option value="PAID_SUBSCRIBER">Subscriber</option>
-                        <option value="ADMIN">Admin</option>
+                        {user.role === 'ADMIN' && <option value="ADMIN">Admin</option>}
                       </select>
                     </td>
                     <td>{dayjs(user.created_at).format('MMM D, YYYY')}</td>

@@ -1,4 +1,5 @@
 import supabase from '../config/supabase.js';
+import { generateBlogContent } from '../services/geminiService.js';
 
 // Handler: generate blog using Gemini, parse title & content, save to DB
 export const generateAIBlog = async (req, res) => {
@@ -6,11 +7,6 @@ export const generateAIBlog = async (req, res) => {
 	if (!topic) return res.status(400).json({ error: 'Missing required field: topic' });
 
 	try {
-		// Dynamically import the Gemini service (handles CommonJS/ESM interop)
-		const mod = await import('../services/geminiService.js');
-		const generateBlogContent = mod.generateBlogContent || mod.default?.generateBlogContent;
-		if (!generateBlogContent) throw new Error('generateBlogContent not available from geminiService');
-
 		const markdown = await generateBlogContent(topic, style);
 
 		// Parse title: prefer first H1 ('# Title'), then 'Title:' line, else first non-empty line

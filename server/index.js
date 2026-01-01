@@ -9,8 +9,21 @@ import likeRoutes from "./routes/likeRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import aiBlogRoutes from "./routes/aiBlogRoutes.js";
+import rateLimit from 'express-rate-limit';
 
 const app = express();
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: { error: 'Too many requests from this IP, please try again after 15 minutes' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Apply rate limiter to all routes
+app.use(limiter);
 
 // Enable CORS
 app.use(
@@ -70,42 +83,6 @@ app.get('/db-health', async (req, res) => {
   }
 });
 
-
-// Temporary endpoint to upgrade user to ADMIN
-app.post('/setup-admin', async (req, res) => {
-  const { email } = req.body;
-  
-  if (!email) {
-    return res.status(400).json({ error: 'Email is required' });
-  }
-
-  try {
-    // 1. Get user ID from profiles
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('email', email)
-      .single();
-
-    if (profileError) {
-      return res.status(404).json({ error: 'User not found. Please sign up first.' });
-    }
-
-    // 2. Update role to ADMIN
-    const { data, error } = await supabase
-      .from('profiles')
-      .update({ role: 'ADMIN' })
-      .eq('id', profile.id)
-      .select()
-      .single();
-
-    if (error) throw error;
-
-    res.status(200).json({ message: 'User upgraded to ADMIN successfully', user: data });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
 
 // Start server on PORT
 const PORT = process.env.PORT || 5000;

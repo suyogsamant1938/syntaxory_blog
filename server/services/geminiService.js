@@ -1,10 +1,10 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Initialize Gemini client
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Generate tech blog content
-const generateBlogContent = async (topic, style = "technical") => {
+export const generateBlogContent = async (topic, style = "technical") => {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
     
@@ -27,5 +27,3 @@ const generateBlogContent = async (topic, style = "technical") => {
     throw error;
   }
 };
-
-module.exports = { generateBlogContent };
