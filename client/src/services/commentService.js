@@ -6,7 +6,7 @@ const commentService = {
     const response = await api.get(`/comments/${blogId}/comments`, {
       params: { page, limit },
     });
-    return response.data;
+    return response.data.data;
   },
 
   // Add a comment to a blog post

@@ -6,7 +6,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // Generate tech blog content
 export const generateBlogContent = async (topic, style = "technical") => {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `Write a ${style} blog post about "${topic}". 
     The blog should be engaging, informative, and well-structured with:

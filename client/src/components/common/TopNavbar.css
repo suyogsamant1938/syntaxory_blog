@@ -132,6 +132,12 @@
     transform: scale(1.05);
 }
 
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
 /* User Menu */
 .user-menu {
     position: relative;

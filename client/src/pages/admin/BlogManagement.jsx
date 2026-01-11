@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { FiSearch, FiEdit2, FiTrash2, FiEye, FiPlus } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { useConfirm } from '../../contexts/ConfirmContext';
+import { useToast } from '../../contexts/ToastContext';
 import blogService from '../../services/blogService';
 import dayjs from 'dayjs';
 import './BlogManagement.css';
@@ -12,6 +14,8 @@ const BlogManagement = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const confirm = useConfirm();
+  const { addToast } = useToast();
 
   useEffect(() => {
     fetchBlogs();
@@ -56,15 +60,19 @@ const BlogManagement = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this blog?')) {
-      return;
-    }
-
+    const isConfirmed = await confirm({
+      message: 'Are you sure you want to delete this blog?',
+      type: 'danger'
+    });
+    
+    if (!isConfirmed) return;
+    
     try {
       await blogService.deleteBlog(id);
       setBlogs(blogs.filter(blog => blog.id !== id));
+      addToast('Blog deleted successfully', 'success');
     } catch (err) {
-      alert(err.message || 'Failed to delete blog');
+      addToast(err.message || 'Failed to delete blog', 'error');
     }
   };
 
@@ -106,7 +114,10 @@ const BlogManagement = () => {
 
         <div className="filter-group">
           <label>Status:</label>
-          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+          <select 
+            value={statusFilter} 
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
             <option value="all">All</option>
             <option value="published">Published</option>
             <option value="draft">Draft</option>
@@ -150,17 +161,18 @@ const BlogManagement = () => {
                     <td>{dayjs(blog.created_at).format('MMM D, YYYY')}</td>
                     <td>
                       <div className="action-buttons">
-                        <Link to={`/blog/${blog.id}`} className="action-btn view">
-                          <FiEye /> View
+                        <Link to={`/blog/${blog.id}`} className="action-btn view" title="View Blog">
+                          <FiEye />
                         </Link>
-                        <Link to={`/edit/${blog.id}`} className="action-btn edit">
-                          <FiEdit2 /> Edit
+                        <Link to={`/edit/${blog.id}`} className="action-btn edit" title="Edit Blog">
+                          <FiEdit2 />
                         </Link>
                         <button
                           onClick={() => handleDelete(blog.id)}
                           className="action-btn delete"
+                          title="Delete Blog"
                         >
-                          <FiTrash2 /> Delete
+                          <FiTrash2 />
                         </button>
                       </div>
                     </td>

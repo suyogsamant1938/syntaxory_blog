@@ -23,8 +23,10 @@ const TopNavbar = () => {
   }, []);
 
   const handleLogout = async () => {
+    console.log('TopNavbar: handleLogout clicked');
     try {
       await signOut();
+      console.log('TopNavbar: signOut completed, navigating home');
       setIsDropdownOpen(false);
       navigate('/');
     } catch (error) {

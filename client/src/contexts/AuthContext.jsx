@@ -23,14 +23,17 @@ export const AuthProvider = ({ children }) => {
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (session?.user) {
-        setUser(session.user);
-        await loadUserProfile(session.user.id);
-      } else {
+      console.log('Auth state change:', event);
+      if (event === 'SIGNED_OUT' || !session) {
         setUser(null);
         setProfile(null);
+        setLoading(false);
+      } else if (session?.user) {
+        setUser(session.user);
+        // Don't await this, let it load in background
+        loadUserProfile(session.user.id);
+        setLoading(false);
       }
-      setLoading(false);
     });
 
     return () => {
@@ -54,7 +57,9 @@ export const AuthProvider = ({ children }) => {
 
   const loadUserProfile = async (userId) => {
     try {
+      console.log(`AuthContext: fetching profile for ${userId}`);
       const userProfile = await authService.getUserProfile(userId);
+      console.log('AuthContext: getUserProfile success', userProfile);
       setProfile(userProfile);
     } catch (error) {
       console.error('Error loading profile:', error);
@@ -67,10 +72,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signIn = async (email, password) => {
+    console.log('AuthContext: signIn called');
     const data = await authService.signIn(email, password);
+    console.log('AuthContext: authService.signIn returned', data);
     if (data.user) {
       setUser(data.user);
-      await loadUserProfile(data.user.id);
+      console.log('AuthContext: loading user profile (non-blocking)');
+      // Don't await this, let it load in background so we don't block navigation
+      loadUserProfile(data.user.id);
     }
     return data;
   };
@@ -84,7 +93,13 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signOut = async () => {
-    await authService.signOut();
+    // Fire and forget - don't await the network call
+    authService.signOut().catch(err => console.error('Background signOut error:', err));
+    
+    // Explicitly clear local storage to prevent persistence on refresh
+    localStorage.removeItem(`sb-${import.meta.env.VITE_SUPABASE_ID}-auth-token`);
+    localStorage.clear(); // Clear all to be safe, or just the specific key if known
+
     setUser(null);
     setProfile(null);
   };

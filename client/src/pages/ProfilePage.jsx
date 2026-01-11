@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react';
-import { FiUser, FiMail, FiStar, FiClock, FiEdit2, FiLogOut } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
+import { FiUser, FiMail, FiStar, FiClock, FiEdit2, FiLogOut, FiTrash2 } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
+import { useConfirm } from '../contexts/ConfirmContext';
 import { useToast } from '../contexts/ToastContext';
 import blogService from '../services/blogService';
 import dayjs from 'dayjs';
 import './ProfilePage.css';
 
 const ProfilePage = () => {
-  const { user, profile, isPaidUser, signOut } = useAuth();
+  const navigate = useNavigate();
+  const confirm = useConfirm();
+  const { user, profile, isPaidUser, isAdmin, signOut } = useAuth();
   const { addToast } = useToast();
   const [userBlogs, setUserBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,7 +32,7 @@ const ProfilePage = () => {
       // OR better, we can add a getMyBlogs to blogService if the backend supports it.
       // Let's try to list all and filter by author_id for this MVP.
       
-      const allBlogs = await blogService.getAllBlogs();
+      const allBlogs = await blogService.getBlogs();
       const myBlogs = allBlogs.filter(blog => blog.author_id === user.id);
       setUserBlogs(myBlogs);
     } catch (error) {
@@ -48,6 +52,24 @@ const ProfilePage = () => {
     }
   };
 
+  const handleEdit = (id) => {
+    navigate(`/edit/${id}`);
+  };
+
+  const handleDelete = async (id) => {
+    const isConfirmed = await confirm('Are you sure you want to delete this blog post?');
+    if (!isConfirmed) return;
+    
+    try {
+      await blogService.deleteBlog(id);
+      setUserBlogs(prev => prev.filter(blog => blog.id !== id));
+      addToast('Blog deleted successfully', 'success');
+    } catch (error) {
+      console.error('Error deleting blog:', error);
+      addToast('Failed to delete blog', 'error');
+    }
+  };
+
   if (!user) return null;
 
   return (
@@ -63,9 +85,11 @@ const ProfilePage = () => {
               <FiMail /> {user.email}
             </p>
             <div className="profile-badges">
-              <span className={`badge ${isPaidUser ? 'badge-pro' : 'badge-free'}`}>
-                {isPaidUser ? <><FiStar /> Pro Member</> : 'Free Plan'}
-              </span>
+              {!isAdmin && (
+                <span className={`badge ${isPaidUser ? 'badge-pro' : 'badge-free'}`}>
+                  {isPaidUser ? <><FiStar /> Pro Member</> : 'Free Plan'}
+                </span>
+              )}
               <span className="badge badge-role">
                 {profile?.role || 'User'}
               </span>
@@ -103,8 +127,19 @@ const ProfilePage = () => {
                     </div>
                   </div>
                   <div className="blog-card-actions">
-                    <button className="btn-icon" title="Edit">
+                    <button 
+                      className="btn-icon" 
+                      title="Edit"
+                      onClick={() => handleEdit(blog.id)}
+                    >
                       <FiEdit2 />
+                    </button>
+                    <button 
+                      className="btn-icon btn-icon-danger" 
+                      title="Delete"
+                      onClick={() => handleDelete(blog.id)}
+                    >
+                      <FiTrash2 />
                     </button>
                   </div>
                 </div>

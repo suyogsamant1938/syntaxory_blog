@@ -102,10 +102,10 @@ const AdminDashboard = () => {
   return (
     <div className="admin-dashboard">
       {/* Header */}
-      <div className="dashboard-header">
+      <div className="page-header">
         <div>
-          <h1 className="dashboard-title">Dashboard Overview</h1>
-          <p className="dashboard-subtitle">Welcome back! Here's what's happening today.</p>
+          <h1 className="page-title">Dashboard Overview</h1>
+          <p className="page-subtitle">Welcome back! Here's what's happening today.</p>
         </div>
       </div>
 

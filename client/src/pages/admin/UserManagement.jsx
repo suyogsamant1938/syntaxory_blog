@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { FiSearch, FiTrash2, FiUsers } from 'react-icons/fi';
 import adminService from '../../services/adminService';
+import { useConfirm } from '../../contexts/ConfirmContext';
+import { useToast } from '../../contexts/ToastContext';
 import dayjs from 'dayjs';
 import './UserManagement.css';
 
@@ -11,6 +13,8 @@ const UserManagement = () => {
   const [roleFilter, setRoleFilter] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const confirm = useConfirm();
+  const { addToast } = useToast();
 
   useEffect(() => {
     fetchUsers();
@@ -59,21 +63,27 @@ const UserManagement = () => {
       setUsers(users.map(user => 
         user.id === userId ? { ...user, role: newRole } : user
       ));
+      addToast('User role updated successfully', 'success');
     } catch (err) {
-      alert(err.message || 'Failed to update user role');
+      addToast(err.message || 'Failed to update user role', 'error');
     }
   };
 
   const handleDelete = async (userId) => {
-    if (!window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
-      return;
-    }
+    const isConfirmed = await confirm({
+      title: 'Delete User?',
+      message: 'Are you sure you want to delete this user? This action cannot be undone.',
+      type: 'danger'
+    });
+
+    if (!isConfirmed) return;
 
     try {
       await adminService.deleteUser(userId);
       setUsers(users.filter(user => user.id !== userId));
+      addToast('User deleted successfully', 'success');
     } catch (err) {
-      alert(err.message || 'Failed to delete user');
+      addToast(err.message || 'Failed to delete user', 'error');
     }
   };
 

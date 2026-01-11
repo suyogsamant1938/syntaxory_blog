@@ -2,59 +2,13 @@
     padding: var(--space-8);
 }
 
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: var(--space-8);
-}
+/* Page header and title handled globally */
 
-.page-title {
-    font-size: var(--text-4xl);
-    font-weight: var(--font-black);
-    margin-bottom: var(--space-2);
-}
 
-.page-subtitle {
-    font-size: var(--text-base);
-    color: var(--color-text-tertiary);
-}
+/* Filters section handled by global.css */
 
-.filters-bar {
-    display: flex;
-    gap: var(--space-4);
-    margin-bottom: var(--space-6);
-}
 
-.search-box {
-    flex: 1;
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.filter-group {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-}
-
-.filter-select {
-    padding: var(--space-3) var(--space-4);
-    background: var(--color-bg-elevated);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    color: var(--color-text-primary);
-    font-size: var(--text-base);
-    cursor: pointer;
-    transition: all var(--transition-base);
-    min-width: 150px;
-}
-
-.filter-select:focus {
-    outline: none;
-    border-color: var(--color-accent-purple);
-}
+/* Filter select handled by global.css */
 
 .type-badge {
     display: inline-block;
@@ -79,47 +33,7 @@
     font-size: var(--text-sm);
 }
 
-.action-buttons {
-    display: flex;
-    gap: var(--space-2);
-}
-
-.action-btn {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--color-bg-elevated);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: all var(--transition-base);
-    font-size: var(--text-base);
-}
-
-.action-btn:hover {
-    transform: translateY(-2px);
-}
-
-.action-btn.view:hover {
-    background: var(--color-accent-blue);
-    border-color: var(--color-accent-blue);
-    color: var(--color-text-primary);
-}
-
-.action-btn.edit:hover {
-    background: var(--color-accent-purple);
-    border-color: var(--color-accent-purple);
-    color: var(--color-text-primary);
-}
-
-.action-btn.delete:hover {
-    background: var(--color-accent-orange);
-    border-color: var(--color-accent-orange);
-    color: var(--color-text-primary);
-}
+/* Action buttons handled globally */
 
 .pagination {
     display: flex;

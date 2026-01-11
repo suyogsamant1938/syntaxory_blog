@@ -1,12 +1,16 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FiSave, FiCpu, FiImage, FiType, FiAlignLeft } from 'react-icons/fi';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { FiSave, FiCpu, FiImage, FiType, FiAlignLeft, FiArrowLeft } from 'react-icons/fi';
 import { useToast } from '../contexts/ToastContext';
 import blogService from '../services/blogService';
 import aiService from '../services/aiService';
-import './CreateBlogPage.css';
+import './CreateBlogPage.css'; // Reusing create page styles
 
-const CreateBlogPage = () => {
+const EditBlogPage = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { addToast } = useToast();
+
   const [formData, setFormData] = useState({
     title: '',
     content: '',
@@ -17,12 +21,34 @@ const CreateBlogPage = () => {
     topic: '',
     style: 'technical'
   });
+  const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showAiModal, setShowAiModal] = useState(false);
-  
-  const { addToast } = useToast();
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchBlog();
+  }, [id]);
+
+  const fetchBlog = async () => {
+    try {
+      setIsLoading(true);
+      const blog = await blogService.getBlogById(id);
+      setFormData({
+        title: blog.title || '',
+        content: blog.content || '',
+        category: blog.category || 'Technology',
+        image_url: blog.image_url || ''
+      });
+      setAiPrompt(prev => ({ ...prev, topic: blog.title || '' }));
+    } catch (error) {
+      console.error('Error fetching blog:', error);
+      addToast('Failed to load blog post', 'error');
+      navigate('/profile');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -54,11 +80,11 @@ const CreateBlogPage = () => {
         content: generatedBlog.content || formData.content,
       });
       
-      addToast('Blog content generated successfully!', 'success');
+      addToast('Blog content updated by AI!', 'success');
       setShowAiModal(false);
     } catch (error) {
       console.error('AI generation error:', error);
-      addToast('Failed to generate content. Please try again.', 'error');
+      addToast('Failed to generate content', 'error');
     } finally {
       setIsGenerating(false);
     }
@@ -73,27 +99,43 @@ const CreateBlogPage = () => {
 
     setIsSubmitting(true);
     try {
-      await blogService.createBlog(formData);
-      addToast('Blog post published successfully!', 'success');
+      await blogService.updateBlog(id, formData);
+      addToast('Blog post updated successfully!', 'success');
       navigate('/blogs');
     } catch (error) {
-      console.error('Create blog error:', error);
-      addToast('Failed to publish blog', 'error');
+      console.error('Update blog error:', error);
+      addToast('Failed to update blog', 'error');
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="create-blog-page">
+        <div className="container" style={{ textAlign: 'center', padding: '100px 0' }}>
+          <div className="loading-spinner-large"></div>
+          <p>Loading blog content...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="create-blog-page">
       <div className="container">
         <header className="page-header">
-          <h1 className="page-title">Create New Post</h1>
+          <div>
+            <button className="btn btn-outline" onClick={() => navigate(-1)} style={{ marginBottom: '1rem', padding: '0.5rem 1rem' }}>
+                <FiArrowLeft /> Back
+            </button>
+            <h1 className="page-title">Edit Post</h1>
+          </div>
           <button 
             className="btn btn-secondary ai-btn"
             onClick={() => setShowAiModal(true)}
           >
-            <FiCpu /> Generate with AI
+            <FiCpu /> Rewrite with AI
           </button>
         </header>
 
@@ -168,7 +210,7 @@ const CreateBlogPage = () => {
             <button 
               type="button" 
               className="btn btn-outline"
-              onClick={() => navigate('/blogs')}
+              onClick={() => navigate(-1)}
               disabled={isSubmitting}
             >
               Cancel
@@ -178,7 +220,7 @@ const CreateBlogPage = () => {
               className="btn btn-primary"
               disabled={isSubmitting}
             >
-              <FiSave /> {isSubmitting ? 'Publishing...' : 'Publish Post'}
+              <FiSave /> {isSubmitting ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
         </form>
@@ -192,18 +234,18 @@ const CreateBlogPage = () => {
               <FiCpu /> AI Writing Assistant
             </h2>
             <p className="modal-subtitle">
-              Let our AI help you draft your next masterpiece.
+              Let our AI help you rewrite or expand your content.
             </p>
 
             <div className="form-group">
-              <label htmlFor="topic">Topic</label>
+              <label htmlFor="topic">Topic / Instructions</label>
               <input
                 type="text"
                 id="topic"
                 name="topic"
                 value={aiPrompt.topic}
                 onChange={handleAiChange}
-                placeholder="e.g., The Future of React Server Components"
+                placeholder="e.g., Rewrite this from a more professional perspective"
                 autoFocus
               />
             </div>
@@ -242,7 +284,7 @@ const CreateBlogPage = () => {
                   </>
                 ) : (
                   <>
-                    <FiCpu /> Generate Content
+                    <FiCpu /> Regenerate
                   </>
                 )}
               </button>
@@ -254,4 +296,4 @@ const CreateBlogPage = () => {
   );
 };
 
-export default CreateBlogPage;
+export default EditBlogPage;

@@ -1,0 +1,124 @@
+.confirm-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: var(--space-4);
+    animation: fadeIn 0.2s ease-out;
+}
+
+.confirm-modal-container {
+    width: 100%;
+    max-width: 400px;
+    padding: var(--space-6);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-2xl);
+    animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.confirm-modal-header {
+    margin-bottom: var(--space-4);
+}
+
+.confirm-modal-title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    margin: 0;
+}
+
+.title-danger {
+    color: var(--color-accent-red, #ff4d4f);
+}
+
+.title-warning {
+    color: #faad14;
+}
+
+.title-info {
+    color: var(--color-accent-purple);
+}
+
+.confirm-modal-body {
+    margin-bottom: var(--space-6);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+}
+
+.confirm-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-3);
+}
+
+.confirm-btn-cancel {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: var(--font-medium);
+    transition: all var(--transition-fast);
+}
+
+.confirm-btn-cancel:hover {
+    background: var(--color-bg-tertiary);
+}
+
+.confirm-btn-confirm {
+    border: none;
+    color: white;
+    padding: var(--space-2) var(--space-6);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: var(--font-bold);
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ff4d4f 0%, #cf1322 100%);
+}
+
+.btn-danger:hover {
+    box-shadow: 0 4px 12px rgba(255, 77, 79, 0.4);
+    transform: translateY(-1px);
+}
+
+.btn-info {
+    background: var(--gradient-primary);
+}
+
+.btn-warning {
+    background: #faad14;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}

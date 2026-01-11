@@ -104,7 +104,7 @@ const CommentSection = ({ blogId }) => {
                   <span className="comment-author">{comment.user_name || 'User'}</span>
                   <span className="comment-date">{dayjs(comment.created_at).fromNow()}</span>
                 </div>
-                <p className="comment-text">{comment.content}</p>
+                <p className="comment-text">{comment.comment}</p>
               </div>
             </div>
           ))

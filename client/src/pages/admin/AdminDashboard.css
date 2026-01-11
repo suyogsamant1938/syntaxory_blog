@@ -2,21 +2,11 @@
     padding: var(--space-8);
 }
 
+/* Dashboard header handled by global page-header but kept for specific tweaks if needed */
 .dashboard-header {
     margin-bottom: var(--space-8);
 }
 
-.dashboard-title {
-    font-size: var(--text-3xl);
-    font-weight: var(--font-bold);
-    margin-bottom: var(--space-2);
-    color: var(--color-text-primary);
-}
-
-.dashboard-subtitle {
-    font-size: var(--text-base);
-    color: var(--color-text-tertiary);
-}
 
 .stats-grid {
     display: grid;
@@ -64,37 +54,8 @@
     text-decoration: underline;
 }
 
-.table-container {
-    overflow-x: auto;
-}
+/* Table styles handled globally */
 
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.data-table thead {
-    background: var(--color-bg-elevated);
-}
-
-.data-table th {
-    text-align: left;
-    padding: var(--space-3) var(--space-4);
-    font-size: var(--text-sm);
-    font-weight: var(--font-semibold);
-    color: var(--color-text-secondary);
-}
-
-.data-table td {
-    padding: var(--space-3) var(--space-4);
-    border-top: 1px solid var(--color-border);
-    color: var(--color-text-secondary);
-    font-size: var(--text-sm);
-}
-
-.data-table tbody tr:hover {
-    background: var(--color-bg-elevated);
-}
 
 .blog-title-cell {
     font-weight: var(--font-medium);

@@ -63,7 +63,9 @@ const LoginRegister = () => {
 
     try {
       if (isLogin) {
+        console.log('Attempting sign in...');
         await signIn(formData.email, formData.password);
+        console.log('Sign in successful, navigating to home...');
         addToast('Successfully logged in!', 'success');
         navigate('/');
       } else {
