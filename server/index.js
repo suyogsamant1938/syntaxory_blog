@@ -52,10 +52,10 @@ app.use("/comments", commentRoutes);
 app.use("/ai", aiBlogRoutes);
 
 
-app.use(errorHandler);
-
 // Mount image routes
 app.use("/images", imageRoutes);
+
+app.use(errorHandler);
 
 // Add a health check route at /health
 app.get('/health', (req, res) => {

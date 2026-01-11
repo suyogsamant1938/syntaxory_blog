@@ -30,16 +30,7 @@ export const generateAIBlog = async (req, res) => {
 
 		const author_id = req.user?.id || null;
 
-		const { data, error } = await supabase
-			.from('blogs')
-			.insert([
-				{ title, content, author_id, author_type: 'AI' }
-			])
-			.select()
-			.single();
-
-		if (error) return res.status(400).json({ error: error.message });
-		res.status(201).json(data);
+		res.status(200).json({ title, content });
 	} catch (err) {
 		console.error('AI blog generation error:', err);
 		res.status(500).json({ error: err.message });

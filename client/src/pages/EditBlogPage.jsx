@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FiSave, FiCpu, FiImage, FiType, FiAlignLeft, FiArrowLeft } from 'react-icons/fi';
+import { FiSave, FiCpu, FiType, FiAlignLeft, FiArrowLeft } from 'react-icons/fi';
 import { useToast } from '../contexts/ToastContext';
+import ImageUpload from '../components/common/ImageUpload';
 import blogService from '../services/blogService';
 import aiService from '../services/aiService';
 import './CreateBlogPage.css'; // Reusing create page styles
@@ -175,17 +176,10 @@ const EditBlogPage = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="image_url">
-                <FiImage /> Cover Image URL
-              </label>
-              <input
-                type="text"
-                id="image_url"
-                name="image_url"
-                value={formData.image_url}
-                onChange={handleChange}
-                placeholder="https://example.com/image.jpg"
-                disabled={isSubmitting}
+              <label>Cover Image</label>
+              <ImageUpload 
+                onUploadComplete={(url) => setFormData(prev => ({ ...prev, image_url: url }))} 
+                initialImageUrl={formData.image_url}
               />
             </div>
           </div>

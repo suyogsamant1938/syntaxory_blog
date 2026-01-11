@@ -30,12 +30,19 @@ export const getBlog = async (req, res) => {
 };
 
 export const createBlog = async (req, res) => {
-	const { title, content } = req.body;
+	const { title, content, image_url, category } = req.body;
 	const author_id = req.user?.id;
 	try {
 		const { data, error } = await supabase
 			.from('blogs')
-			.insert([{ title, content, author_id, author_type: 'HUMAN' }])
+			.insert([{ 
+				title, 
+				content, 
+				author_id, 
+				author_type: 'HUMAN', 
+				image_url: image_url || '', 
+				category: category || 'Technology' 
+			}])
 			.select()
 			.single();
 
@@ -48,7 +55,7 @@ export const createBlog = async (req, res) => {
 
 export const updateBlog = async (req, res) => {
 	const { id } = req.params;
-	const { title, content } = req.body;
+	const { title, content, image_url, category } = req.body;
 	const userId = req.user?.id;
 	try {
 		const { data: existing, error: getErr } = await supabase
@@ -62,7 +69,12 @@ export const updateBlog = async (req, res) => {
 
 		const { data, error } = await supabase
 			.from('blogs')
-			.update({ title, content })
+			.update({ 
+				title, 
+				content, 
+				image_url: image_url || '', 
+				category: category || 'Technology' 
+			})
 			.eq('id', id)
 			.select()
 			.single();
