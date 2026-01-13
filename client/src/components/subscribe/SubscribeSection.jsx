@@ -8,9 +8,18 @@ import './SubscribeSection.css';
 
 const SubscribeSection = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isPaidUser, loading, profile } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
+
+  // Wait for auth check and profile load to prevent flash
+  if (loading || (isAuthenticated && !profile)) {
+    return null;
+  }
+
+  if (isPaidUser) {
+    return null;
+  }
 
   const handleSubscribe = async () => {
     if (!isAuthenticated) {

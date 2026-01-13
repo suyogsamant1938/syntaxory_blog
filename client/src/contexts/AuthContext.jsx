@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import authService from '../services/authService';
 import { supabase } from '../lib/supabase';
 
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const loadUserProfile = async (userId) => {
+  const loadUserProfile = useCallback(async (userId) => {
     try {
       console.log(`AuthContext: fetching profile for ${userId}`);
       const userProfile = await authService.getUserProfile(userId);
@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Error loading profile:', error);
     }
-  };
+  }, []);
 
   const signUp = async (email, password, name) => {
     const data = await authService.signUp(email, password, name);
@@ -113,6 +113,7 @@ export const AuthProvider = ({ children }) => {
     signInWithGoogle,
     signInWithGithub,
     signOut,
+    refreshProfile: useCallback(() => user && loadUserProfile(user.id), [user, loadUserProfile]),
     isAuthenticated: !!user,
     isPaidUser: profile?.role === 'PAID_SUBSCRIBER',
     isAdmin: profile?.role === 'ADMIN',

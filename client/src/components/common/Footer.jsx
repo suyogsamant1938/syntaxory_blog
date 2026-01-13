@@ -1,9 +1,20 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
 import { FiGithub, FiTwitter, FiLinkedin, FiMail, FiHeart } from 'react-icons/fi';
 import './Footer.css';
 
 const Footer = () => {
+  const { isAdmin, isPaidUser } = useAuth();
+  const { addToast } = useToast();
   const currentYear = new Date().getFullYear();
+
+  const handleWriteClick = (e) => {
+    if (!isAdmin && !isPaidUser) {
+      e.preventDefault();
+      addToast('You must be a paid subscriber to write blogs.', 'error');
+    }
+  };
 
   return (
     <footer className="footer">
@@ -38,7 +49,7 @@ const Footer = () => {
               <Link to="/">Home</Link>
               <Link to="/blogs">Blogs</Link>
               <Link to="/about">About</Link>
-              <Link to="/create">Write</Link>
+              <Link to="/create" onClick={handleWriteClick}>Write</Link>
             </nav>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
 import { FiSearch, FiMenu, FiX, FiUser, FiEdit, FiLogOut, FiShield } from 'react-icons/fi';
 import Menu from './Menu';
 import './TopNavbar.css';
@@ -11,7 +12,8 @@ const TopNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const { user, profile, isAuthenticated, isAdmin, signOut } = useAuth();
+  const { user, profile, isAuthenticated, isAdmin, isPaidUser, signOut } = useAuth();
+  const { addToast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,6 +34,15 @@ const TopNavbar = () => {
     } catch (error) {
       console.error('Logout error:', error);
     }
+  };
+  
+  const handleWriteClick = (e) => {
+    if (!isAdmin && !isPaidUser) {
+      e.preventDefault();
+      addToast('You must be a paid subscriber to write blogs.', 'error');
+      return;
+    }
+    setIsDropdownOpen(false);
   };
 
   return (
@@ -71,7 +82,11 @@ const TopNavbar = () => {
             {/* User Section */}
             <div className="nav-user">
               {isAuthenticated && (
-                <Link to="/create" className="btn btn-primary btn-sm write-btn">
+                <Link 
+                  to="/create" 
+                  className="btn btn-primary btn-sm write-btn"
+                  onClick={handleWriteClick}
+                >
                   <FiEdit /> <span className="write-text">Write</span>
                 </Link>
               )}
@@ -94,7 +109,11 @@ const TopNavbar = () => {
                         <Link to="/profile" className="dropdown-item" onClick={() => setIsDropdownOpen(false)}>
                           <FiUser /> Profile
                         </Link>
-                        <Link to="/create" className="dropdown-item" onClick={() => setIsDropdownOpen(false)}>
+                        <Link 
+                          to="/create" 
+                          className="dropdown-item" 
+                          onClick={handleWriteClick}
+                        >
                           <FiEdit /> Write Blog
                         </Link>
                         {isAdmin && (
@@ -128,7 +147,7 @@ const TopNavbar = () => {
       </nav>
 
       {/* Mobile Menu */}
-      <Menu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} user={user} />
+      <Menu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </>
   );
 };

@@ -1,5 +1,5 @@
 import { stripeClient, stripeWebhookSecret } from '../config/stripe.js';
-import supabaseAdmin from '../config/supabase.js';
+import { supabaseAdmin } from '../config/supabase.js';
 
 // Handle Stripe webhook
 // Verify signature

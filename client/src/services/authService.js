@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import api from './api';
 
 const authService = {
   // Sign up with email and password
@@ -84,6 +85,12 @@ const authService = {
 
     if (error) throw error;
     return data;
+  },
+
+  // Verify Stripe session
+  verifyStripeSession: async (sessionId) => {
+    const response = await api.post('/stripe/verify-session', { sessionId });
+    return response.data;
   },
 };
 

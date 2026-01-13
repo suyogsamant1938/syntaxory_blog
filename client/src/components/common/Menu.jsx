@@ -1,9 +1,23 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
 import { FiX, FiHome, FiFileText, FiInfo, FiEdit, FiUser } from 'react-icons/fi';
 import './Menu.css';
 
-const Menu = ({ isOpen, onClose, user }) => {
+const Menu = ({ isOpen, onClose }) => {
+  const { user, isAdmin, isPaidUser } = useAuth();
+  const { addToast } = useToast();
+
   if (!isOpen) return null;
+
+  const handleWriteClick = (e) => {
+    if (!isAdmin && !isPaidUser) {
+      e.preventDefault();
+      addToast('You must be a paid subscriber to write blogs.', 'error');
+      return;
+    }
+    onClose();
+  };
 
   return (
     <>
@@ -36,7 +50,11 @@ const Menu = ({ isOpen, onClose, user }) => {
           </Link>
           {user && (
             <>
-              <Link to="/create" className="menu-link" onClick={onClose}>
+              <Link 
+                to="/create" 
+                className="menu-link" 
+                onClick={handleWriteClick}
+              >
                 <FiEdit />
                 <span>Write Blog</span>
               </Link>

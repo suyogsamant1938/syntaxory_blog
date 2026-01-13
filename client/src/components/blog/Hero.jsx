@@ -1,8 +1,20 @@
 import { FiArrowRight, FiTrendingUp } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
 import './Hero.css';
 
 const Hero = () => {
+  const { isAdmin, isPaidUser } = useAuth();
+  const { addToast } = useToast();
+
+  const handleWriteClick = (e) => {
+    if (!isAdmin && !isPaidUser) {
+      e.preventDefault();
+      addToast('You must be a paid subscriber to write blogs.', 'error');
+    }
+  };
+
   return (
     <section className="hero">
       {/* Animated Background Elements */}
@@ -37,7 +49,7 @@ const Hero = () => {
               Explore Blogs
               <FiArrowRight />
             </Link>
-            <Link to="/create" className="btn btn-outline btn-lg">
+            <Link to="/create" className="btn btn-outline btn-lg" onClick={handleWriteClick}>
               Start Writing
             </Link>
           </div>

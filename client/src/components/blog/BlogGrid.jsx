@@ -29,9 +29,18 @@ const BlogGrid = ({ initialBlogs = [] }) => {
 
     // Filter by tag
     if (selectedTag !== 'all') {
-      filtered = filtered.filter(blog =>
-        blog.tags && blog.tags.includes(selectedTag)
-      );
+      filtered = filtered.filter(blog => {
+        const matchTag = blog.tags && blog.tags.includes(selectedTag);
+        const matchCategory = blog.category === selectedTag;
+        
+        // Also check if the tag appears in title or content (case-insensitive, whole word)
+        // Escape special characters for regex (like Node.js)
+        const escapedTag = selectedTag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const tagRegex = new RegExp(`\\b${escapedTag}\\b`, 'i');
+        const matchContent = tagRegex.test(blog.title) || tagRegex.test(blog.content);
+
+        return matchTag || matchCategory || matchContent;
+      });
     }
 
     setFilteredBlogs(filtered);
