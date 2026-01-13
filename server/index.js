@@ -40,20 +40,13 @@ app.post('/webhook', express.raw({ type: 'application/json' }), webhookHandler);
 // JSON parsing for all other routes
 app.use(express.json());
 
-// Mount blog routes
-app.use('/blogs', blogRoutes);
-
-app.use("/stripe", stripeRoutes);
-
-app.use("/likes", likeRoutes);
-
-app.use("/comments", commentRoutes);
-
-app.use("/ai", aiBlogRoutes);
-
-
-// Mount image routes
-app.use("/images", imageRoutes);
+// Mount routes under /api
+app.use('/api/blogs', blogRoutes);
+app.use("/api/stripe", stripeRoutes);
+app.use("/api/likes", likeRoutes);
+app.use("/api/comments", commentRoutes);
+app.use("/api/ai", aiBlogRoutes);
+app.use("/api/images", imageRoutes);
 
 app.use(errorHandler);
 
@@ -84,8 +77,11 @@ app.get('/db-health', async (req, res) => {
 });
 
 
+
 // Start server on PORT
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+export default app;
