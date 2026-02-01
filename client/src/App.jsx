@@ -106,7 +106,7 @@ function App() {
               <Route path="users" element={<UserManagement />} />
             </Route>
 
-            {/* TODO: Add more routes */}
+
             <Route path="/blog/:id" element={
               <div className="app">
                 <TopNavbar />
