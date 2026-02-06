@@ -41,10 +41,10 @@ You must set the following Environment Variables in your Vercel Project Settings
     - **Root Directory**: Keep it as `./` (the root of your project).
     - **Build and Output Settings**:
         - **Build Command**: `npm run build`
-        - **Output Directory**: `client/dist` (This is the most important part to fix the error you saw).
+        - **Output Directory**: `dist` (This is now the default, so it's easier!)
         - **Install Command**: `npm install`
     - **Environment Variables**: Add all the variables listed above.
-4.  **Deploy**: Click **Deploy**.
+    - **Click Deploy**.
 
 ## 4. Post-Deployment Checks
 - **Stripe Webhooks**: Update your Stripe Dashboard Webhook Endpoint to `https://your-project-name.vercel.app/api/webhook`.

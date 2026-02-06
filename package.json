@@ -5,7 +5,7 @@
         "server"
     ],
     "scripts": {
-        "build": "npm run build --workspace=client"
+        "build": "npm run build --workspace=client && cp -r client/dist ./dist"
     },
     "engines": {
         "node": "20.x"
