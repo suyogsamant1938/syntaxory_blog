@@ -37,9 +37,12 @@ You must set the following Environment Variables in your Vercel Project Settings
     - Click **"Add New..."** -> **"Project"**.
     - Import your `syntaxory_blog` repository.
 3.  **Configure Project**:
-    - **Framework Preset**: Vercel should detect "Other" or "Vite". If it detects Vite, that's fine, but our `vercel.json` overrides the build.
-    - **Root Directory**: Leave it as `./` (Root).
-    - **Build and Output Settings**: You can leave these default, `vercel.json` handles it.
+    - **Framework Preset**: Select **Vite**.
+    - **Root Directory**: Keep it as `./` (the root of your project).
+    - **Build and Output Settings**:
+        - **Build Command**: `npm run build`
+        - **Output Directory**: `client/dist` (This is the most important part to fix the error you saw).
+        - **Install Command**: `npm install`
     - **Environment Variables**: Add all the variables listed above.
 4.  **Deploy**: Click **Deploy**.
 
