@@ -3,7 +3,9 @@ import { supabase } from '../lib/supabase';
 
 // Create axios instance with base URL
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  // In production (Vercel), VITE_API_URL should be set to /api
+  // In development, it defaults to localhost
+  baseURL: import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:5000/api' : '/api'),
   headers: {
     'Content-Type': 'application/json',
   },
