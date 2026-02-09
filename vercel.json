@@ -15,17 +15,21 @@
     ],
     "routes": [
         {
+            "src": "/webhook",
+            "dest": "server/index.js"
+        },
+        {
             "src": "/api/(.*)",
-            "dest": "/server/index.js"
+            "dest": "server/index.js"
         },
         {
             "src": "/(.*)",
-            "dest": "/client/$1",
+            "dest": "/$1",
             "check": true
         },
         {
             "src": "/(.*)",
-            "dest": "/client/index.html"
+            "dest": "/index.html"
         }
     ]
 }

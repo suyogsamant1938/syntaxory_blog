@@ -10,6 +10,10 @@ import commentRoutes from "./routes/commentRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import aiBlogRoutes from "./routes/aiBlogRoutes.js";
 import rateLimit from 'express-rate-limit';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 const app = express();
 
@@ -26,9 +30,14 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Enable CORS
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'https://your-project-name.vercel.app', // Fallback or additional domains
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: allowedOrigins.length > 0 ? allowedOrigins : true,
     credentials: true,
   })
 );
@@ -48,22 +57,22 @@ app.use("/api/comments", commentRoutes);
 app.use("/api/ai", aiBlogRoutes);
 app.use("/api/images", imageRoutes);
 
-app.use(errorHandler);
-
-// Add a health check route at /health
-app.get('/health', (req, res) => {
+// Add a health check route at /api/health
+app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'Server is running' });
 });
 
 // Test Supabase connection by fetching 1 blog
-app.get('/db-health', async (req, res) => {
+app.get('/api/db-health', async (req, res) => {
   try {
+    console.log('Testing DB connection...');
     const { data, error } = await supabase
       .from('blogs')
       .select('id')
       .limit(1);
     
     if (error) {
+      console.error('DB Health Error:', error);
       return res.status(500).json({ error: error.message });
     }
     
@@ -72,9 +81,22 @@ app.get('/db-health', async (req, res) => {
       data 
     });
   } catch (err) {
+    console.error('DB Health Exception:', err);
     res.status(500).json({ error: err.message });
   }
 });
+
+// Catch-all for debugging unmatched /api routes
+app.use('/api/(.*)', (req, res) => {
+  console.log(`404 at: ${req.originalUrl}`);
+  res.status(404).json({ 
+    error: 'Route not found', 
+    path: req.originalUrl,
+    message: 'Check your server routes and vercel.json configuration'
+  });
+});
+
+app.use(errorHandler);
 
 
 

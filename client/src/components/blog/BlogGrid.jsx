@@ -13,6 +13,10 @@ const BlogGrid = ({ initialBlogs = [] }) => {
   const allTags = ['all', 'React', 'JavaScript', 'Node.js', 'Python', 'CSS', 'DevOps', 'AI'];
 
   useEffect(() => {
+    setBlogs(initialBlogs);
+  }, [initialBlogs]);
+
+  useEffect(() => {
     filterBlogs();
   }, [searchQuery, selectedTag, blogs]);
 
